@@ -55,7 +55,7 @@ export function HeroSection() {
 
   return (
     <SectionWrapper
-      id="home"
+      id="home" 
       eyebrow="Welcome"
       title="Hi, I&apos;m Your Name"
       subtitle="A passionate software developer / IT student focused on building clean, performant, and user-friendly web applications."
