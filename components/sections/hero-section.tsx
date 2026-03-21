@@ -15,13 +15,25 @@ export function HeroSection() {
     describe?: string;
     tag?: string[];
   } | null>(null);
+
   const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    axios.get("/api/sections/home").then((res: AxiosResponse<any>) => {
-      setData(res.data);
-      console.log(data)
+
+  const loadData = async()=>{
+    try {
+         const res = await axios.get("/api/sections/home")
+        //  console.log("data", res.data.data)
+         setData(res.data.data);
+         setLoading(false);
+         
+    } catch (error) {
+      console.log(error)
       setLoading(false);
-    });
+    }
+  }
+  useEffect(() => {
+
+    loadData();
+
   }, []);
 
   if (loading) {
