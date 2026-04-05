@@ -4,16 +4,19 @@ import { SkillsSection } from "@/components/sections/skills-section";
 import { ProjectsSection } from "@/components/sections/projects-section";
 import { ResumeSection } from "@/components/sections/resume-section";
 import { ContactSection } from "@/components/sections/contact-section";
+import PortfolioLanding from "@/components/PortfolioLanding";
 
-export default function Home() {
+export default function Home() { 
   return (
     <>
-      <HeroSection />
+   <HeroSection />
       <AboutSection />
       <SkillsSection />
       <ProjectsSection />
       <ResumeSection />
       <ContactSection />
+
+
     </>
   );
 }

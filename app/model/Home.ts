@@ -1,18 +1,31 @@
 import { model, models, Schema } from "mongoose";
 
 const HomeSchema = new Schema(
-    {
-        greeting : String,
-        s_intro:String,
-        intro:String,
-        message:String,
-        title:{
-            required:true,
-            type:String
-        },
-        describe:String,
-        tag:[String]
-    }
-)
+  {
+    greeting: {
+      type: String,
+    },
+    s_intro: {
+      type: String,
+    },
+    intro: {
+      type: String,
+    },
+    message: {
+      type: String,
+    },
+    title: {
+      type: String,
+      required: true,
+    },
+    describe: {
+      type: String,
+    },
+    tag: {
+      type: [String],
+    },
+  },
+  { timestamps: true }
+);
 
-export default models.Home || model("Home", HomeSchema)
+export default models.Home || model("Home", HomeSchema);

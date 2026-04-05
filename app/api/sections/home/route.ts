@@ -16,19 +16,24 @@ export async function GET() {
   }
 }
 
+// To add data in Home page
 export async function POST(request: NextRequest) {
   try {
     await dbConnect();
     const body = await request.json();
-    const data = await Home.findOneAndUpdate({}, body, {
-      upsert: true,
-      new: true,
-    });
-    return NextResponse.json({ success: true, data });
+    // console.log(body)
+    const data = await Home.create(body)
+    
+    // Sending response 
+    return NextResponse.json({
+      success:true,
+      message:"Data is added",
+      data:data
+    },{status:201})
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
-      { success: false, error: message },
+      { success: false, error: message, message:"copy" },
       { status: 500 }
     );
   }

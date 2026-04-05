@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import axios, { AxiosResponse } from "axios";
 import { SectionWrapper } from "./section-wrapper";
-import { FiX } from "react-icons/fi";
+
 
 export function HeroSection() {
   const [data, setData] = useState<{
