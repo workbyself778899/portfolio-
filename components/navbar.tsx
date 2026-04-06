@@ -125,7 +125,7 @@ export function Navbar() {
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
-          className="border-b border-border bg-card md:hidden"
+          className="border-b border-border dark:bg-black bg-white md:hidden"
         >
           <div className="container flex flex-col gap-1 py-3 text-sm">
             {SECTIONS.map((section) => (

@@ -30,7 +30,7 @@ export default function AdminHeader() {
       <div className="w-full  max-w-5xl px-4 py-2 flex flex-col md:flex-row items-end lg:items-center justify-end">
         {/* Hamburger (Mobile Only) */}
         <button
-          className="md:hidden text-2xl text-gray-900 dark:text-gray-100 mb-2 md:mb-0"
+          className="md:hidden text-2xl   mb-2 md:mb-0"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           {menuOpen ? "✕" : "☰"}
