@@ -67,7 +67,8 @@ export function HeroSection() {
         {data.intro && <h2 className="text-2xl font-bold">{data.intro}</h2>}
         {data.s_intro && <p className="text-base text-muted-foreground">{data.s_intro}</p>}
         {data.message && <p className="text-base text-muted-foreground">{data.message}</p>}
-        {data.tag && data.tag.length > 0 && (
+       
+          {data.tag && data.tag.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-2">
             {data.tag.map((t) => (
               <span key={t} className="badge">{t}</span>

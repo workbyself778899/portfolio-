@@ -50,9 +50,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <div className="relative min-h-screen bg-background text-foreground">
-            <Navbar />
+           
             <PageTransition>
-              <main className="pt-20 pb-10">
+              <main className="pt-0 pb-10">
                 {children}
               </main>
             </PageTransition>
