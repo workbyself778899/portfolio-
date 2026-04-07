@@ -1,9 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { SectionWrapper } from "./section-wrapper";
-
 
 export function HeroSection() {
   const [data, setData] = useState<{
@@ -12,28 +11,26 @@ export function HeroSection() {
     intro?: string;
     message?: string;
     title?: string;
+    image?: string;
     describe?: string;
     tag?: string[];
   } | null>(null);
 
   const [loading, setLoading] = useState(true);
 
-  const loadData = async()=>{
+  const loadData = async () => {
     try {
-         const res = await axios.get("/api/sections/home")
-        //  console.log("data", res.data.data)
-         setData(res.data.data);
-         setLoading(false);
-         
+      const res = await axios.get("/api/sections/home");
+      setData(res.data.data);
+      setLoading(false);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       setLoading(false);
     }
-  }
+  };
+
   useEffect(() => {
-
     loadData();
-
   }, []);
 
   if (loading) {
@@ -62,21 +59,32 @@ export function HeroSection() {
       eyebrow={data.greeting ?? data.message}
       title={data.title}
       subtitle={data.describe}
+      image={data.image}
     >
-      <div className="space-y-4">
-        {data.intro && <h2 className="text-2xl font-bold">{data.intro}</h2>}
-        {data.s_intro && <p className="text-base text-muted-foreground">{data.s_intro}</p>}
-        {data.message && <p className="text-base text-muted-foreground">{data.message}</p>}
-       
+      <div className="grid md:grid-cols-2 gap-10 items-center">
+        
+        {/* LEFT CONTENT */}
+        <div className="space-y-4">
+          {data.intro && <h2 className="text-2xl font-bold">{data.intro}</h2>}
+          {data.s_intro && (
+            <p className="text-base text-muted-foreground">{data.s_intro}</p>
+          )}
+          {data.message && (
+            <p className="text-base text-muted-foreground">{data.message}</p>
+          )}
+
           {data.tag && data.tag.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-2">
-            {data.tag.map((t) => (
-              <span key={t} className="badge">{t}</span>
-            ))}
-          </div>
-        )}
+            <div className="flex flex-wrap gap-2 mt-2">
+              {data.tag.map((t) => (
+                <span key={t} className="badge">
+                  {t}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
       </div>
     </SectionWrapper>
   );
-// End of HeroSection function
 }

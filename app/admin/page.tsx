@@ -1,9 +1,11 @@
+import Home from "./home/page";
+
 export default function AdminPage(){
     return( 
-        <div className="my-0">
+        <div className="">
           
-            <div className="my-0">
-               sd
+            <div className="">
+               <Home/>
             </div>
          
         </div>

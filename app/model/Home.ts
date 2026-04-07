@@ -24,6 +24,9 @@ const HomeSchema = new Schema(
     tag: {
       type: [String],
     },
+    image:{
+      type:String,
+    }
   },
   { timestamps: true }
 );

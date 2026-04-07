@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { PageTransition } from "@/components/page-transition";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -49,10 +50,10 @@ export default function RootLayout({
           enableColorScheme
           disableTransitionOnChange
         >
-          <div className="relative min-h-screen bg-background text-foreground">
-           
+          <div className="flex flex-col bg-background text-foreground">
+            <Toaster position="top-right" />
             <PageTransition>
-              <main className="pt-0 pb-10">
+              <main className="pt-0 pb-10 flex-1">
                 {children}
               </main>
             </PageTransition>

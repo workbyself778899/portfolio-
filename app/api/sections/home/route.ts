@@ -21,8 +21,8 @@ export async function POST(request: NextRequest) {
   try {
     await dbConnect();
     const body = await request.json();
-    // console.log(body)
-    const data = await Home.create(body)
+    console.log({body})
+    const data = await Home.findOneAndUpdate({},body,{new:true, upsert: true, runValidators:true})
     
     // Sending response 
     return NextResponse.json({
