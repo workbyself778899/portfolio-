@@ -3,7 +3,6 @@ import { model, models, Schema } from "mongoose";
 const AboutSchema = new Schema({
   title: String,
   describe: String,
-  paragraphs: [String],
   timeline: [
     {
       title: String,

@@ -25,7 +25,7 @@ export function AboutSection() {
   if (loading) {
     return (
       <SectionWrapper id="about" eyebrow="About" title="..." subtitle="">
-        <div className="flex min-h-[120px] items-center justify-center text-muted-foreground">Loading...</div>
+        <div className="flex min-h-30 items-center justify-center text-muted-foreground">Loading...</div>
       </SectionWrapper>
     );
   }
@@ -56,32 +56,10 @@ export function AboutSection() {
   return (
     <SectionWrapper id="about" eyebrow="About" title={title} subtitle={subtitle}>
       <div className="grid gap-10 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
-        {paragraphs.length > 0 && (
-          <div className="space-y-6 text-sm text-muted-foreground sm:text-base">
-            {paragraphs.map((p, i) => (
-              <p key={i}>{p}</p>
-            ))}
-          </div>
-        )}
+        
 
         <div className="space-y-6">
-          {timeline.length > 0 && (
-            <div className="space-y-4 rounded-2xl border border-border bg-card p-4 shadow-lg shadow-black/40">
-              <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                Education & Experience
-              </h3>
-              <div className="space-y-4">
-                {timeline.map((item) => (
-                  <div key={item.title} className="border-l border-border pl-4">
-                    <p className="text-xs text-muted-foreground">{item.period}</p>
-                    <p className="text-sm font-semibold text-foreground">{item.title}</p>
-                    <p className="text-xs text-muted-foreground">{item.institution}</p>
-                    <p className="mt-1 text-xs text-muted-foreground">{item.description}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          
 
           {skills.length > 0 && (
             <div className="space-y-3 rounded-2xl border border-border bg-card p-4 shadow-lg shadow-black/40">
@@ -95,9 +73,12 @@ export function AboutSection() {
                       <span>{skill.name}</span>
                       <span className="text-sky-500">{skill.level}%</span>
                     </div>
+
+                    {/* skill level bar   */}
+
                     <div className="mt-1 h-2 rounded-full bg-muted">
                       <motion.div
-                        className="h-2 rounded-full bg-gradient-to-r from-sky-400 to-cyan-300"
+                        className="h-2 rounded-full bg-linear-to-r from-sky-400 to-cyan-300"
                         initial={{ width: 0 }}
                         whileInView={{ width: `${skill.level}%` }}
                         viewport={{ once: true }}
