@@ -101,39 +101,48 @@ export default function Projects() {
     });
   };
 
-  const handleSubmitProject = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!currentProject) return;
+ const handleSubmitProject = async (e: React.FormEvent) => {
+  e.preventDefault();
+  if (!currentProject) return;
 
-    setSubmitting(true);
+  setSubmitting(true);
 
-    try {
-      const isEditing = !!currentProject._id;
+  try {
+    const isEditing = !!currentProject._id;
 
-      const response = await fetch('/api/sections/projects', {
-        method: isEditing ? 'PUT' : 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(currentProject),
-      });
+    const url = isEditing
+      ? `/api/sections/projects?id=${currentProject._id}`
+      : '/api/sections/projects';
 
-      const result = await response.json();
+    const method = isEditing ? 'PUT' : 'POST';
 
-      if (result.success) {
-        alert(isEditing ? 'Project updated!' : 'Project created!');
-        await fetchProjects();
-        handleCloseForm();
-      } else {
-        alert('Error saving project');
-      }
-    } catch (error) {
-      console.error(error);
-      alert('Error saving project');
-    } finally {
-      setSubmitting(false);
+    // IMPORTANT: don't rely on _id inside body for updates
+    const { _id, ...payload } = currentProject;
+
+    const response = await fetch(url, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(isEditing ? payload : currentProject),
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      alert(isEditing ? 'Project updated!' : 'Project created!');
+      await fetchProjects();
+      handleCloseForm();
+    } else {
+      alert(result.message || 'Error saving project');
     }
-  };
+  } catch (error) {
+    console.error('Submit error:', error);
+    alert('Error saving project');
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   const handleDeleteProject = async (id?: string) => {
     if (!id) return;

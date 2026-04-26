@@ -36,7 +36,8 @@ export async function PUT(request: NextRequest) {
     await dbConnect();
     const body = await request.json();
     const { id, ...updateData } = body;
-    const project = await Project.findByIdAndUpdate(id, updateData, {
+    console.log(id, "i get id")
+    const project = await Project.findOneAndUpdate(id, updateData, {
       new: true,
     });
     return NextResponse.json({ success: true, data: project });
