@@ -12,7 +12,6 @@ type NavItems = {
 
 const navItems: NavItems[] = [
   { path: "/admin/home", label: "Home" },
-  { path: "/admin/about", label: "About" },
   { path: "/admin/skill", label: "Skills" },
   { path: "/admin/projects", label: "Projects" },
   { path: "/admin/resumes", label: "Resumes" },

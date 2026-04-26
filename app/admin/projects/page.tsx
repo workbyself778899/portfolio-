@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -21,7 +20,6 @@ export default function Projects() {
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const [showForm, setShowForm] = useState(false);
 
-  // Fetch data on mount
   useEffect(() => {
     fetchProjects();
   }, []);
@@ -30,6 +28,7 @@ export default function Projects() {
     try {
       const response = await fetch('/api/sections/projects');
       const result = await response.json();
+
       if (result.success) {
         setProjects(result.data || []);
       }
@@ -54,7 +53,7 @@ export default function Projects() {
   };
 
   const handleEditProject = (project: Project) => {
-    setCurrentProject(project);
+    setCurrentProject({ ...project });
     setShowForm(true);
   };
 
@@ -64,41 +63,42 @@ export default function Projects() {
   };
 
   const handleProjectChange = (field: string, value: any) => {
-    if (currentProject) {
-      setCurrentProject({
-        ...currentProject,
-        [field]: value,
-      });
-    }
+    if (!currentProject) return;
+
+    setCurrentProject({
+      ...currentProject,
+      [field]: value,
+    });
   };
 
   const handleTechChange = (index: number, value: string) => {
-    if (currentProject) {
-      const newTech = [...currentProject.tech];
-      newTech[index] = value;
-      setCurrentProject({
-        ...currentProject,
-        tech: newTech,
-      });
-    }
+    if (!currentProject) return;
+
+    const newTech = [...currentProject.tech];
+    newTech[index] = value;
+
+    setCurrentProject({
+      ...currentProject,
+      tech: newTech,
+    });
   };
 
   const addTech = () => {
-    if (currentProject) {
-      setCurrentProject({
-        ...currentProject,
-        tech: [...currentProject.tech, ''],
-      });
-    }
+    if (!currentProject) return;
+
+    setCurrentProject({
+      ...currentProject,
+      tech: [...currentProject.tech, ''],
+    });
   };
 
   const removeTech = (index: number) => {
-    if (currentProject) {
-      setCurrentProject({
-        ...currentProject,
-        tech: currentProject.tech.filter((_, i) => i !== index),
-      });
-    }
+    if (!currentProject) return;
+
+    setCurrentProject({
+      ...currentProject,
+      tech: currentProject.tech.filter((_, i) => i !== index),
+    });
   };
 
   const handleSubmitProject = async (e: React.FormEvent) => {
@@ -106,13 +106,12 @@ export default function Projects() {
     if (!currentProject) return;
 
     setSubmitting(true);
-    try {
-      const isEditing = currentProject._id;
-      const url = '/api/sections/projects';
-      const method = isEditing ? 'PUT' : 'POST';
 
-      const response = await fetch(url, {
-        method,
+    try {
+      const isEditing = !!currentProject._id;
+
+      const response = await fetch('/api/sections/projects', {
+        method: isEditing ? 'PUT' : 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -120,22 +119,23 @@ export default function Projects() {
       });
 
       const result = await response.json();
+
       if (result.success) {
-        alert(isEditing ? 'Project updated successfully!' : 'Project created successfully!');
+        alert(isEditing ? 'Project updated!' : 'Project created!');
         await fetchProjects();
         handleCloseForm();
       } else {
         alert('Error saving project');
       }
     } catch (error) {
-      console.error('Error submitting project:', error);
+      console.error(error);
       alert('Error saving project');
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleDeleteProject = async (id: string | undefined) => {
+  const handleDeleteProject = async (id?: string) => {
     if (!id) return;
 
     if (!confirm('Are you sure you want to delete this project?')) return;
@@ -146,15 +146,15 @@ export default function Projects() {
       });
 
       const result = await response.json();
+
       if (result.success) {
-        alert('Project deleted successfully!');
+        alert('Project deleted!');
         await fetchProjects();
       } else {
-        alert('Error deleting project');
+        alert('Delete failed');
       }
     } catch (error) {
-      console.error('Error deleting project:', error);
-      alert('Error deleting project');
+      console.error(error);
     }
   };
 
@@ -162,175 +162,198 @@ export default function Projects() {
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
+      {/* HEADER */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Edit Projects</h1>
+
         <button
           onClick={handleAddProject}
-          className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 font-medium"
+          className="px-5 py-2 bg-green-500 text-white rounded"
         >
-          Add New Project
+          Add Project
         </button>
       </div>
 
-      {/* Projects List */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-        {projects.map((project) => (
-          <div key={project._id} className="border p-4 rounded-lg">
-            <h3 className="text-lg font-bold mb-2">{project.title}</h3>
-            <p className="text-sm text-gray-600 mb-3 line-clamp-2">{project.description}</p>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {project.tech.map((tech, i) => (
-                <span key={i} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">
-                  {tech}
-                </span>
-              ))}
+      {/* LIST */}
+      <div className="grid md:grid-cols-2 gap-4 mb-10">
+        {projects
+          .sort((a, b) => a.order - b.order)
+          .map((project) => (
+            <div key={project._id} className="border p-4 rounded">
+              <h2 className="font-bold text-lg">{project.title}</h2>
+              <p className="text-sm text-gray-600">
+                {project.description}
+              </p>
+
+              {/* IMAGE */}
+              {project.image && (
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="mt-2 h-32 w-full object-cover rounded"
+                />
+              )}
+
+              <div className="flex flex-wrap gap-2 mt-2">
+                {project.tech?.map((t, i) => (
+                  <span
+                    key={i}
+                    className="text-xs bg-blue-100 px-2 py-1 rounded"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+
+              <div className="flex gap-2 mt-3">
+                <button
+                  onClick={() => handleEditProject(project)}
+                  className="flex-1 bg-blue-500 text-white py-1 rounded"
+                >
+                  Edit
+                </button>
+
+                <button
+                  onClick={() => handleDeleteProject(project._id)}
+                  className="flex-1 bg-red-500 text-white py-1 rounded"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
-            <div className="flex gap-2">
-              <button
-                onClick={() => handleEditProject(project)}
-                className="flex-1 px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => handleDeleteProject(project._id)}
-                className="flex-1 px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        ))}
+          ))}
       </div>
 
-      {/* Project Form */}
+      {/* FORM MODAL */}
       {showForm && currentProject && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6">
-            <h2 className="text-2xl font-bold mb-6">
-              {currentProject._id ? 'Edit Project' : 'Add New Project'}
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
+          <div className="bg-white w-full max-w-2xl p-6 rounded max-h-[90vh] overflow-y-auto">
+            <h2 className="text-xl font-bold mb-4">
+              {currentProject._id ? 'Edit' : 'Add'} Project
             </h2>
 
-            <form onSubmit={handleSubmitProject} className="space-y-4">
-              {/* Title */}
-              <div>
-                <label className="block text-sm font-medium mb-1">Title</label>
-                <input
-                  type="text"
-                  value={currentProject.title}
-                  onChange={(e) => handleProjectChange('title', e.target.value)}
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Project title"
-                  required
+            <form onSubmit={handleSubmitProject} className="space-y-3">
+              {/* TITLE */}
+              <input
+                className="w-full border p-2"
+                value={currentProject.title}
+                onChange={(e) =>
+                  handleProjectChange('title', e.target.value)
+                }
+                placeholder="Title"
+                required
+              />
+
+              {/* DESCRIPTION */}
+              <textarea
+                className="w-full border p-2"
+                value={currentProject.description}
+                onChange={(e) =>
+                  handleProjectChange('description', e.target.value)
+                }
+                placeholder="Description"
+              />
+
+              {/* IMAGE */}
+              <input
+                className="w-full border p-2"
+                value={currentProject.image}
+                onChange={(e) =>
+                  handleProjectChange('image', e.target.value)
+                }
+                placeholder="Image URL"
+              />
+
+              {currentProject.image && (
+                <img
+                  src={currentProject.image}
+                  className="h-32 w-full object-cover rounded"
                 />
-              </div>
+              )}
 
-              {/* Description */}
+              {/* TECH */}
               <div>
-                <label className="block text-sm font-medium mb-1">Description</label>
-                <textarea
-                  value={currentProject.description}
-                  onChange={(e) => handleProjectChange('description', e.target.value)}
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-24"
-                  placeholder="Project description"
-                />
+                <button
+                  type="button"
+                  onClick={addTech}
+                  className="bg-blue-500 text-white px-3 py-1 rounded"
+                >
+                  Add Tech
+                </button>
+
+                {currentProject.tech.map((t, i) => (
+                  <div key={i} className="flex gap-2 mt-2">
+                    <input
+                      className="flex-1 border p-2"
+                      value={t}
+                      onChange={(e) =>
+                        handleTechChange(i, e.target.value)
+                      }
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeTech(i)}
+                      className="bg-red-500 text-white px-2"
+                    >
+                      X
+                    </button>
+                  </div>
+                ))}
               </div>
 
-              {/* Image URL */}
-              <div>
-                <label className="block text-sm font-medium mb-1">Image URL</label>
-                <input
-                  type="text"
-                  value={currentProject.image}
-                  onChange={(e) => handleProjectChange('image', e.target.value)}
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Image URL"
-                />
-              </div>
+              {/* GITHUB */}
+              <input
+                className="w-full border p-2"
+                value={currentProject.github}
+                onChange={(e) =>
+                  handleProjectChange('github', e.target.value)
+                }
+                placeholder="GitHub"
+              />
 
-              {/* Technologies */}
-              <div>
-                <div className="flex justify-between items-center mb-2">
-                  <label className="block text-sm font-medium">Technologies</label>
-                  <button
-                    type="button"
-                    onClick={addTech}
-                    className="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
-                  >
-                    Add Tech
-                  </button>
-                </div>
-                <div className="space-y-2">
-                  {currentProject.tech.map((tech, index) => (
-                    <div key={index} className="flex gap-2">
-                      <input
-                        type="text"
-                        value={tech}
-                        onChange={(e) => handleTechChange(index, e.target.value)}
-                        className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Technology name"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeTech(index)}
-                        className="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              {/* DEMO */}
+              <input
+                className="w-full border p-2"
+                value={currentProject.demo}
+                onChange={(e) =>
+                  handleProjectChange('demo', e.target.value)
+                }
+                placeholder="Demo"
+              />
 
-              {/* GitHub URL */}
-              <div>
-                <label className="block text-sm font-medium mb-1">GitHub URL</label>
-                <input
-                  type="url"
-                  value={currentProject.github}
-                  onChange={(e) => handleProjectChange('github', e.target.value)}
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="https://github.com/..."
-                />
-              </div>
+              {/* ORDER (FIXED NaN ISSUE) */}
+              <input
+                type="number"
+                className="w-full border p-2"
+                value={
+                  isNaN(currentProject.order)
+                    ? ''
+                    : currentProject.order
+                }
+                onChange={(e) => {
+                  const val = e.target.value;
+                  handleProjectChange(
+                    'order',
+                    val === '' ? 0 : Number(val)
+                  );
+                }}
+                placeholder="Order"
+              />
 
-              {/* Demo URL */}
-              <div>
-                <label className="block text-sm font-medium mb-1">Demo URL</label>
-                <input
-                  type="url"
-                  value={currentProject.demo}
-                  onChange={(e) => handleProjectChange('demo', e.target.value)}
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="https://..."
-                />
-              </div>
-
-              {/* Order */}
-              <div>
-                <label className="block text-sm font-medium mb-1">Display Order</label>
-                <input
-                  type="number"
-                  value={currentProject.order}
-                  onChange={(e) => handleProjectChange('order', parseInt(e.target.value))}
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Display order"
-                />
-              </div>
-
-              {/* Buttons */}
-              <div className="flex gap-3 pt-4">
+              {/* BUTTONS */}
+              <div className="flex gap-3 pt-3">
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex-1 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 font-medium"
+                  className="flex-1 bg-green-500 text-white py-2"
                 >
-                  {submitting ? 'Saving...' : 'Save Project'}
+                  {submitting ? 'Saving...' : 'Save'}
                 </button>
+
                 <button
                   type="button"
                   onClick={handleCloseForm}
-                  className="flex-1 px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 font-medium"
+                  className="flex-1 bg-gray-500 text-white py-2"
                 >
                   Cancel
                 </button>

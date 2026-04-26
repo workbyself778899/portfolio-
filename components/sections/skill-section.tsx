@@ -4,7 +4,7 @@ import { SectionWrapper } from "./section-wrapper";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-export function AboutSection() {
+export function SkillSection() {
   const [data, setData] = useState<{
     title?: string;
     describe?: string;
@@ -24,7 +24,7 @@ export function AboutSection() {
 
   if (loading) {
     return (
-      <SectionWrapper id="about" eyebrow="About" title="..." subtitle="">
+      <SectionWrapper id="skill"  title="..." subtitle="">
         <div className="flex min-h-30 items-center justify-center text-muted-foreground">Loading...</div>
       </SectionWrapper>
     );
@@ -32,7 +32,7 @@ export function AboutSection() {
 
   if (!data) {
     return (
-      <SectionWrapper id="about" eyebrow="About" title="About" subtitle="">
+      <SectionWrapper id="about" title="About" subtitle="">
         <p className="text-sm text-muted-foreground">No content yet. Add content from the admin panel.</p>
       </SectionWrapper>
     );
@@ -47,15 +47,15 @@ export function AboutSection() {
   const hasContent = paragraphs.length > 0 || timeline.length > 0 || skills.length > 0;
   if (!hasContent) {
     return (
-      <SectionWrapper id="about" eyebrow="About" title={title} subtitle={subtitle}>
+      <SectionWrapper id="skill" title={title} subtitle={subtitle}>
         <p className="text-sm text-muted-foreground">No content yet. Add content from the admin panel.</p>
       </SectionWrapper>
     );
   }
 
   return (
-    <SectionWrapper id="about" eyebrow="About" title={title} subtitle={subtitle}>
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
+    <SectionWrapper id="skill"  title={title} subtitle={subtitle}>
+      <div className="grid gap-10 py-5 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
         
 
         <div className="space-y-6">
