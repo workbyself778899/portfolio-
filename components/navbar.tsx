@@ -9,7 +9,7 @@ const SECTIONS = [
   { id: "home", label: "Home" },
   { id: "skill", label: "Skills" },
   { id: "projects", label: "Projects" },
-  { id: "resume", label: "Resume" },
+  { id: "experience", label: "Education" },
   { id: "contact", label: "Contact" },
 ];
 
@@ -71,7 +71,7 @@ export function Navbar() {
           className="flex cursor-pointer items-center gap-2"
           onClick={() => handleNavClick("home")}
         >
-          <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-tr from-sky-500 to-cyan-400 text-base font-bold text-slate-950 shadow-lg shadow-sky-500/40">
+          <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-linear-to-tr from-sky-500 to-cyan-400 text-base font-bold text-slate-950 shadow-lg shadow-sky-500/40">
             CV
           </div>
           <div className="hidden flex-col text-sm sm:flex">

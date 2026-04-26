@@ -1,315 +1,193 @@
+"use client";
 
-'use client';
+import { useEffect, useState } from "react";
 
-import { useState, useEffect } from 'react';
-
-interface ResumeItem {
-  title: string;
-  org: string;
-  period: string;
-  description: string;
-}
-
-interface ResumeSection {
-  type: string;
-  items: ResumeItem[];
-}
-
-interface ResumeData {
+type Exp = {
   _id?: string;
-  sections: ResumeSection[];
-  cvUrl: string;
-  downloadText: string;
-  description: string;
-}
+  type: "experience" | "education";
+  title: string;
+  organization: string;
+  startDate: string;
+  endDate: string;
+  description?: string;
+  location?: string;
+  order: number;
+};
 
-export default function Resumes() {
-  const [data, setData] = useState<ResumeData>({
-    sections: [],
-    cvUrl: '',
-    downloadText: '',
-    description: '',
-  });
+export default function AdminExperience() {
+  const [data, setData] = useState<Exp[]>([]);
+  const [form, setForm] = useState<Exp | null>(null);
 
-  const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
+  const load = async () => {
+    try {
+      const res = await fetch("/api/sections/resumes");
+      const json = await res.json();
+      console.log("DATA:", json);
 
-  // Fetch data on mount
+      if (json.success) setData(json.data || []);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
-    fetchResumeData();
+    load();
   }, []);
 
-  const fetchResumeData = async () => {
-    try {
-      const response = await fetch('/api/sections/resumes');
-      const result = await response.json();
-      if (result.success && result.data) {
-        setData(result.data);
-      }
-    } catch (error) {
-      console.error('Error fetching resume data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const save = async () => {
+    if (!form) return;
 
-  const handleInputChange = (field: string, value: string) => {
-    setData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
+    const method = form._id ? "PUT" : "POST";
+    const url = form._id
+      ? `/api/sections/resumes?id=${form._id}`
+      : `/api/sections/resumes`;
 
-  const handleSectionTypeChange = (index: number, value: string) => {
-    const newSections = [...data.sections];
-    newSections[index] = {
-      ...newSections[index],
-      type: value,
-    };
-    setData((prev) => ({
-      ...prev,
-      sections: newSections,
-    }));
-  };
-
-  const handleItemChange = (sectionIndex: number, itemIndex: number, field: string, value: string) => {
-    const newSections = [...data.sections];
-    const newItems = [...newSections[sectionIndex].items];
-    newItems[itemIndex] = {
-      ...newItems[itemIndex],
-      [field]: value,
-    };
-    newSections[sectionIndex] = {
-      ...newSections[sectionIndex],
-      items: newItems,
-    };
-    setData((prev) => ({
-      ...prev,
-      sections: newSections,
-    }));
-  };
-
-  const addItem = (sectionIndex: number) => {
-    const newSections = [...data.sections];
-    newSections[sectionIndex].items.push({
-      title: '',
-      org: '',
-      period: '',
-      description: '',
+    await fetch(url, {
+      method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
     });
-    setData((prev) => ({
-      ...prev,
-      sections: newSections,
-    }));
+
+    setForm(null);
+    load();
   };
 
-  const removeItem = (sectionIndex: number, itemIndex: number) => {
-    const newSections = [...data.sections];
-    newSections[sectionIndex].items = newSections[sectionIndex].items.filter(
-      (_, i) => i !== itemIndex
-    );
-    setData((prev) => ({
-      ...prev,
-      sections: newSections,
-    }));
+  const remove = async (id?: string) => {
+    if (!id) return;
+
+    await fetch(`/api/sections/resumes?id=${id}`, {
+      method: "DELETE",
+    });
+
+    load();
   };
-
-  const addSection = () => {
-    setData((prev) => ({
-      ...prev,
-      sections: [...prev.sections, { type: '', items: [] }],
-    }));
-  };
-
-  const removeSection = (index: number) => {
-    setData((prev) => ({
-      ...prev,
-      sections: prev.sections.filter((_, i) => i !== index),
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-
-    try {
-      const response = await fetch('/api/sections/resumes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-      if (result.success) {
-        alert('Resume section updated successfully!');
-        setData(result.data);
-      } else {
-        alert('Error updating resume section');
-      }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      alert('Error updating resume section');
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  if (loading) return <div className="p-6">Loading...</div>;
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Edit Resume Section</h1>
+    <div className="p-6 max-w-5xl mx-auto space-y-6">
+      <div className="flex justify-between">
+        <h1 className="text-2xl font-bold">Manage Resume</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-8">
-        {/* Description */}
-        <div>
-          <label className="block text-sm font-medium mb-2">Description</label>
-          <textarea
-            value={data.description}
-            onChange={(e) => handleInputChange('description', e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-20"
-            placeholder="Resume section description"
-          />
-        </div>
-
-        {/* CV URL */}
-        <div>
-          <label className="block text-sm font-medium mb-2">CV/Resume Download URL</label>
-          <input
-            type="url"
-            value={data.cvUrl}
-            onChange={(e) => handleInputChange('cvUrl', e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="https://..."
-          />
-        </div>
-
-        {/* Download Text */}
-        <div>
-          <label className="block text-sm font-medium mb-2">Download Button Text</label>
-          <input
-            type="text"
-            value={data.downloadText}
-            onChange={(e) => handleInputChange('downloadText', e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="e.g., Download Resume"
-          />
-        </div>
-
-        {/* Sections */}
-        <div>
-          <div className="flex justify-between items-center mb-4">
-            <label className="block text-sm font-medium">Resume Sections</label>
-            <button
-              type="button"
-              onClick={addSection}
-              className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
-            >
-              Add Section
-            </button>
-          </div>
-          <div className="space-y-6">
-            {data.sections.map((section, sectionIndex) => (
-              <div key={sectionIndex} className="border p-4 rounded-lg space-y-4">
-                {/* Section Type */}
-                <div>
-                  <label className="block text-sm font-medium mb-2">Section Type</label>
-                  <input
-                    type="text"
-                    value={section.type}
-                    onChange={(e) => handleSectionTypeChange(sectionIndex, e.target.value)}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="e.g., Experience, Education, Certifications"
-                  />
-                </div>
-
-                {/* Items in Section */}
-                <div>
-                  <div className="flex justify-between items-center mb-3">
-                    <label className="text-sm font-medium">Items</label>
-                    <button
-                      type="button"
-                      onClick={() => addItem(sectionIndex)}
-                      className="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
-                    >
-                      Add Item
-                    </button>
-                  </div>
-                  <div className="space-y-4 bg-gray-50 p-3 rounded">
-                    {section.items.map((item, itemIndex) => (
-                      <div key={itemIndex} className="border p-3 rounded-lg space-y-2 bg-white">
-                        <input
-                          type="text"
-                          value={item.title}
-                          onChange={(e) =>
-                            handleItemChange(sectionIndex, itemIndex, 'title', e.target.value)
-                          }
-                          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                          placeholder="Title"
-                        />
-                        <input
-                          type="text"
-                          value={item.org}
-                          onChange={(e) =>
-                            handleItemChange(sectionIndex, itemIndex, 'org', e.target.value)
-                          }
-                          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                          placeholder="Organization"
-                        />
-                        <input
-                          type="text"
-                          value={item.period}
-                          onChange={(e) =>
-                            handleItemChange(sectionIndex, itemIndex, 'period', e.target.value)
-                          }
-                          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                          placeholder="Period (e.g., 2020 - 2022)"
-                        />
-                        <textarea
-                          value={item.description}
-                          onChange={(e) =>
-                            handleItemChange(sectionIndex, itemIndex, 'description', e.target.value)
-                          }
-                          className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                          placeholder="Description"
-                          rows={3}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeItem(sectionIndex, itemIndex)}
-                          className="w-full px-2 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600"
-                        >
-                          Remove Item
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Remove Section Button */}
-                <button
-                  type="button"
-                  onClick={() => removeSection(sectionIndex)}
-                  className="w-full px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-                >
-                  Remove Section
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Submit Button */}
         <button
-          type="submit"
-          disabled={submitting}
-          className="w-full px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 font-medium"
+          onClick={() =>
+            setForm({
+              type: "experience",
+              title: "",
+              organization: "",
+              startDate: "",
+              endDate: "",
+              description: "",
+              location: "",
+              order: data.length,
+            })
+          }
+          className="bg-blue-500 text-white px-4 py-2 rounded"
         >
-          {submitting ? 'Saving...' : 'Save Changes'}
+          + Add
         </button>
-      </form>
+      </div>
+
+      {/* EMPTY STATE */}
+      {data.length === 0 && (
+        <p className="text-gray-500">No data yet. Add one.</p>
+      )}
+
+      {/* LIST */}
+      {data.map((item) => (
+        <div
+          key={item._id}
+          className="p-4 border rounded flex justify-between"
+        >
+          <div>
+            <h3 className="font-semibold">{item.title}</h3>
+            <p className="text-sm text-gray-500">
+              {item.organization}
+            </p>
+          </div>
+
+          <div className="flex gap-2">
+            <button className="px-6 py-2 rounded-xl bg-green-400 text-white font-bold" onClick={() => setForm(item)}>Edit</button>
+            <button className="px-6 py-2 rounded-xl bg-red-400 text-white font-bold"  onClick={() => remove(item._id)}>Delete</button>
+          </div>
+        </div>
+      ))}
+
+      {/* FORM MODAL */}
+      {form && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded w-full max-w-md space-y-3">
+
+            <input
+              placeholder="Title"
+              value={form.title}
+              onChange={(e) =>
+                setForm({ ...form, title: e.target.value })
+              }
+              className="w-full border p-2"
+            />
+
+            <input
+              placeholder="Organization"
+              value={form.organization}
+              onChange={(e) =>
+                setForm({ ...form, organization: e.target.value })
+              }
+              className="w-full border p-2"
+            />
+
+            <select
+              value={form.type}
+              onChange={(e) =>
+                setForm({ ...form, type: e.target.value as any })
+              }
+              className="w-full border p-2"
+            >
+              <option value="experience">Experience</option>
+              <option value="education">Education</option>
+            </select>
+
+            <input
+              placeholder="Start Date"
+              value={form.startDate}
+              onChange={(e) =>
+                setForm({ ...form, startDate: e.target.value })
+              }
+              className="w-full border p-2"
+            />
+
+            <input
+              placeholder="End Date"
+              value={form.endDate}
+              onChange={(e) =>
+                setForm({ ...form, endDate: e.target.value })
+              }
+              className="w-full border p-2"
+            />
+
+            <textarea
+              placeholder="Description"
+              value={form.description}
+              onChange={(e) =>
+                setForm({ ...form, description: e.target.value })
+              }
+              className="w-full border p-2"
+            />
+
+            <div className="flex gap-2">
+              <button onClick={save} className="flex-1 bg-green-500 text-white py-2">
+                Save
+              </button>
+
+              <button
+                onClick={() => setForm(null)}
+                className="flex-1 bg-gray-500 text-white py-2"
+              >
+                Cancel
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
     </div>
   );
 }
