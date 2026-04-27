@@ -3,7 +3,7 @@
 import { SectionWrapper } from "./section-wrapper";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
+import { FiGithub, FiLinkedin, FiMail, FiTwitter, FiX } from "react-icons/fi";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
@@ -126,6 +126,7 @@ export function ContactSection() {
               />
             </div>
           </div>
+
           <div>
             <label
               htmlFor="message"
@@ -212,15 +213,7 @@ export function ContactSection() {
                       LinkedIn
                     </a>
                   )}
-                  {email && (
-                    <a
-                      href={`mailto:${email}`}
-                      className="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-3 py-1.5 text-foreground transition hover:border-sky-500 hover:text-sky-500"
-                    >
-                      <FiMail className="h-4 w-4" />
-                      Email
-                    </a>
-                  )}
+                 
                   {socialLinks.twitter && (
                     <a
                       href={socialLinks.twitter}
@@ -228,6 +221,7 @@ export function ContactSection() {
                       rel="noreferrer"
                       className="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-3 py-1.5 text-foreground transition hover:border-sky-500 hover:text-sky-500"
                     >
+                      <FiX className="h-4 w-4" />
                       Twitter
                     </a>
                   )}
