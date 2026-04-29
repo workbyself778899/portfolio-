@@ -4,6 +4,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 ## .env
 ```
 URL = MOngodb address only
+ADMIN_PASSWORD
 ```
 
 ## Getting Started
