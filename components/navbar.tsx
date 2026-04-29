@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
+import axios from "axios";
+import Image from "next/image";
 
 const SECTIONS = [
   { id: "home", label: "Home" },
@@ -17,8 +19,31 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("home");
   const [open, setOpen] = useState(false);
+ 
+  const [data, setData] = useState<{
+    greeting?: string;
+    s_intro?: string;
+    intro?: string;
+    message?: string;
+    title?: string;
+    image?: string;
+    describe?: string;
+    tag?: string[];
+  } | null>(null);
+
+    const loadData = async () => {
+    try {
+      const res = await axios.get("/api/sections/home");
+      setData(res.data.data);
+     
+    } catch (error) {
+      console.log(error);
+   
+    }
+  };
 
   useEffect(() => {
+    loadData();
     const onScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
@@ -47,7 +72,7 @@ export function Navbar() {
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, [data]);
 
   const handleNavClick = (id: string) => {
     const section = document.getElementById(id);
@@ -71,16 +96,27 @@ export function Navbar() {
           className="flex cursor-pointer items-center gap-2"
           onClick={() => handleNavClick("home")}
         >
-          <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-linear-to-tr from-sky-500 to-cyan-400 text-base font-bold text-slate-950 shadow-lg shadow-sky-500/40">
+
+<div className="w-[50px] h-[50px] rounded-full overflow-hidden">
+  {data?.image ? (
+    <Image
+      src={data.image}
+      alt="Logo"
+      width={90}
+      height={90}
+      className="object-cover w-full h-full"
+    />
+  ) : null}
+</div>
+          {/* <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-linear-to-tr from-sky-500 to-cyan-400 text-base font-bold text-slate-950 shadow-lg shadow-sky-500/40">
             CV
-          </div>
+           
+          </div> */}
           <div className="hidden flex-col text-sm sm:flex">
             <span className="font-semibold tracking-tight text-foreground">
-              Your Name
+              {data?.title}
             </span>
-            <span className="text-xs text-muted-foreground">
-              Software Developer / IT Student
-            </span>
+            
           </div>
         </div>
 
