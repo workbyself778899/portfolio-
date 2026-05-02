@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -34,7 +33,6 @@ export default function Contact() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
-  // Fetch data on mount
   useEffect(() => {
     fetchContactData();
   }, []);
@@ -43,8 +41,23 @@ export default function Contact() {
     try {
       const response = await fetch('/api/sections/contact');
       const result = await response.json();
+
       if (result.success && result.data) {
-        setData(result.data);
+        // ✅ Normalize data safely
+        const normalizedData: ContactData = {
+          _id: result.data._id,
+          email: result.data.email || '',
+          location: result.data.location || '',
+          contactText: result.data.contactText || '',
+          availability: result.data.availability || '',
+          socialLinks: {
+            github: result.data.socialLinks?.github || '',
+            linkedin: result.data.socialLinks?.linkedin || '',
+            twitter: result.data.socialLinks?.twitter || '',
+          },
+        };
+
+        setData(normalizedData);
       }
     } catch (error) {
       console.error('Error fetching contact data:', error);
@@ -53,14 +66,14 @@ export default function Contact() {
     }
   };
 
-  const handleInputChange = (field: string, value: string) => {
+  const handleInputChange = (field: keyof ContactData, value: string) => {
     setData((prev) => ({
       ...prev,
       [field]: value,
     }));
   };
 
-  const handleSocialLinkChange = (platform: string, value: string) => {
+  const handleSocialLinkChange = (platform: keyof SocialLinks, value: string) => {
     setData((prev) => ({
       ...prev,
       socialLinks: {
@@ -84,9 +97,23 @@ export default function Contact() {
       });
 
       const result = await response.json();
+
       if (result.success) {
         alert('Contact section updated successfully!');
-        setData(result.data);
+
+        // ✅ Normalize again after save
+        setData({
+          _id: result.data._id,
+          email: result.data.email || '',
+          location: result.data.location || '',
+          contactText: result.data.contactText || '',
+          availability: result.data.availability || '',
+          socialLinks: {
+            github: result.data.socialLinks?.github || '',
+            linkedin: result.data.socialLinks?.linkedin || '',
+            twitter: result.data.socialLinks?.twitter || '',
+          },
+        });
       } else {
         alert('Error updating contact section');
       }
@@ -112,8 +139,7 @@ export default function Contact() {
             type="email"
             value={data.email}
             onChange={(e) => handleInputChange('email', e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="your.email@example.com"
+            className="w-full px-4 py-2 border rounded-lg"
           />
         </div>
 
@@ -124,8 +150,7 @@ export default function Contact() {
             type="text"
             value={data.location}
             onChange={(e) => handleInputChange('location', e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Your location"
+            className="w-full px-4 py-2 border rounded-lg"
           />
         </div>
 
@@ -135,20 +160,18 @@ export default function Contact() {
           <textarea
             value={data.contactText}
             onChange={(e) => handleInputChange('contactText', e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-32"
-            placeholder="Enter the text to display in the contact section"
+            className="w-full px-4 py-2 border rounded-lg min-h-32"
           />
         </div>
 
         {/* Availability */}
         <div>
-          <label className="block text-sm font-medium mb-2">Availability Status</label>
+          <label className="block text-sm font-medium mb-2">Availability</label>
           <input
             type="text"
             value={data.availability}
             onChange={(e) => handleInputChange('availability', e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="e.g., Available for freelance work"
+            className="w-full px-4 py-2 border rounded-lg"
           />
         </div>
 
@@ -156,48 +179,35 @@ export default function Contact() {
         <div className="border-t pt-6">
           <h2 className="text-xl font-bold mb-4">Social Links</h2>
 
-          {/* GitHub */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">GitHub URL</label>
-            <input
-              type="url"
-              value={data.socialLinks.github}
-              onChange={(e) => handleSocialLinkChange('github', e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="https://github.com/..."
-            />
-          </div>
+          <input
+            type="url"
+            value={data.socialLinks?.github || ''}
+            onChange={(e) => handleSocialLinkChange('github', e.target.value)}
+            placeholder="GitHub URL"
+            className="w-full mb-3 px-4 py-2 border rounded-lg"
+          />
 
-          {/* LinkedIn */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">LinkedIn URL</label>
-            <input
-              type="url"
-              value={data.socialLinks.linkedin}
-              onChange={(e) => handleSocialLinkChange('linkedin', e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="https://linkedin.com/in/..."
-            />
-          </div>
+          <input
+            type="url"
+            value={data.socialLinks?.linkedin || ''}
+            onChange={(e) => handleSocialLinkChange('linkedin', e.target.value)}
+            placeholder="LinkedIn URL"
+            className="w-full mb-3 px-4 py-2 border rounded-lg"
+          />
 
-          {/* Twitter */}
-          <div>
-            <label className="block text-sm font-medium mb-2">Twitter/X URL</label>
-            <input
-              type="url"
-              value={data.socialLinks.twitter}
-              onChange={(e) => handleSocialLinkChange('twitter', e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="https://twitter.com/..."
-            />
-          </div>
+          <input
+            type="url"
+            value={data.socialLinks?.twitter || ''}
+            onChange={(e) => handleSocialLinkChange('twitter', e.target.value)}
+            placeholder="Twitter URL"
+            className="w-full px-4 py-2 border rounded-lg"
+          />
         </div>
 
-        {/* Submit Button */}
         <button
           type="submit"
           disabled={submitting}
-          className="w-full px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 font-medium"
+          className="w-full px-6 py-3 bg-blue-500 text-white rounded-lg"
         >
           {submitting ? 'Saving...' : 'Save Changes'}
         </button>

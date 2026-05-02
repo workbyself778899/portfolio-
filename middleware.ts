@@ -11,7 +11,7 @@ export function middleware(req: NextRequest) {
   if (isLoginPage) return NextResponse.next();
 
   if (isAdminRoute && auth !== "true") {
-    return NextResponse.redirect(new URL("/admin/login", req.url));
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
   return NextResponse.next();
