@@ -114,7 +114,7 @@ export default function AdminExperience() {
       {/* FORM MODAL */}
       {form && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded w-full max-w-md space-y-3">
+          <div className=" p-6 bg-gray-700 text-white rounded w-full max-w-md space-y-3">
 
             <input
               placeholder="Title"

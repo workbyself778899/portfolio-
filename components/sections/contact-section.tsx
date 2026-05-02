@@ -211,28 +211,30 @@ export function ContactSection() {
           {hasContactContent ? (
             <>
               <div className="card">
-                <h3 className="text-sm font-semibold">Contact details</h3>
-                {contactText && <p className="text-xs">{contactText}</p>}
-                {email && <p className="text-xs">Email: {email}</p>}
-                {location && <p className="text-xs">Location: {location}</p>}
+                <h3 className=" font-bold text-xl">Contact details</h3>
+            <span className="font-bold"></span>
+              {contactText && <p className="my-2 italic text-xm">   {contactText} </p>}
+                {email && <p className="">Email:  <span className="font-semibold"> {email}  </span> </p>}
+                {location && <p className="text">Location:  <span className="font-semibold"> {location} </span> </p>}
+                  
               </div>
 
               <div className="card">
-                <h3 className="text-sm font-semibold">Social links</h3>
-                <div className="flex gap-3">
+                <h3 className="text-xl font-semibold">Social links</h3>
+                <div className="flex my-2 gap-3">
                   {socialLinks.github && (
                     <a href={socialLinks.github} target="_blank">
-                      <FiGithub />
+                      <FiGithub size={30}/>
                     </a>
                   )}
                   {socialLinks.linkedin && (
                     <a href={socialLinks.linkedin} target="_blank">
-                      <FiLinkedin />
+                      <FiLinkedin size={30}/>
                     </a>
                   )}
                   {socialLinks.twitter && (
                     <a href={socialLinks.twitter} target="_blank">
-                      <FiX />
+                      <FiX size={30}/>
                     </a>
                   )}
                 </div>
