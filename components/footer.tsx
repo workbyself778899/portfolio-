@@ -3,7 +3,7 @@ export function Footer() {
     <footer className="border-t border-border bg-card">
       <div className="container flex flex-col items-center justify-between gap-3 py-4 text-xs text-muted-foreground sm:flex-row">
         <p>
-          © {new Date().getFullYear()} Your Name. All rights reserved.
+          © {new Date().getFullYear()} All rights reserved by owner.
         </p>
         <p className="flex gap-2">
           <span className="hidden sm:inline">

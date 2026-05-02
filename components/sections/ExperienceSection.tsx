@@ -42,7 +42,7 @@ export function ExperienceSection() {
     <SectionWrapper
       id="experience"
     
-      title="Experience & education"
+      title="Experience & Education"
       subtitle="A quick overview of my academic journey and professional experience."
     >
       <div className="flex py-4 flex-col gap-10 lg:flex-row lg:items-start">

@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -17,7 +16,6 @@ export default function Message() {
   const [deleting, setDeleting] = useState<string | null>(null);
   const [selectedMessage, setSelectedMessage] = useState<ContactMessage | null>(null);
 
-  // Fetch messages on mount
   useEffect(() => {
     fetchMessages();
   }, []);
@@ -62,37 +60,40 @@ export default function Message() {
   };
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleString();
+    return new Date(dateString).toLocaleString();
   };
 
-  if (loading) return <div className="p-6">Loading...</div>;
+  if (loading)
+    return <div className="p-6 text-foreground">Loading...</div>;
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-6 max-w-6xl mx-auto bg-background text-foreground">
       <h1 className="text-3xl font-bold mb-6">Contact Messages</h1>
 
       {messages.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-gray-500 text-lg">No messages yet.</p>
+          <p className="text-lg opacity-70">No messages yet.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
           {/* Messages List */}
-          <div className="lg:col-span-1 space-y-2 max-h-[600px] overflow-y-auto border rounded-lg p-4 bg-gray-50">
+          <div className="lg:col-span-1 space-y-2 max-h-[600px] overflow-y-auto border rounded-lg p-4 border-foreground/20">
             {messages.map((msg) => (
               <div
                 key={msg._id}
                 onClick={() => setSelectedMessage(msg)}
                 className={`p-3 rounded-lg cursor-pointer transition ${
                   selectedMessage?._id === msg._id
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-white hover:bg-gray-100'
+                    ? 'bg-blue-500 text-white border-2 border-white'
+                    : 'hover:border hover:border-foreground/40'
                 }`}
               >
                 <p className="font-bold text-sm truncate">{msg.name}</p>
                 <p className="text-xs opacity-70 truncate">{msg.email}</p>
-                <p className="text-xs opacity-70 truncate">{msg.message.substring(0, 50)}...</p>
+                <p className="text-xs opacity-70 truncate">
+                  {msg.message.substring(0, 50)}...
+                </p>
               </div>
             ))}
           </div>
@@ -100,20 +101,26 @@ export default function Message() {
           {/* Message Details */}
           <div className="lg:col-span-2">
             {selectedMessage ? (
-              <div className="border rounded-lg p-6 bg-white">
-                <div className="mb-4 pb-4 border-b">
-                  <h2 className="text-2xl font-bold mb-2">{selectedMessage.name}</h2>
-                  <p className="text-gray-600 mb-1">
-                    <span className="font-medium">Email:</span> {selectedMessage.email}
+              <div className="border rounded-lg p-6 bg-background  border-foreground/20">
+                <div className="mb-4 pb-4 border-b border-foreground/20">
+                  <h2 className="text-2xl font-bold mb-2">
+                    {selectedMessage.name}
+                  </h2>
+
+                  <p className="opacity-80 mb-1">
+                    <span className="font-medium">Email:</span>{' '}
+                    {selectedMessage.email}
                   </p>
-                  <p className="text-sm text-gray-500">
-                    <span className="font-medium">Received:</span> {formatDate(selectedMessage.createdAt)}
+
+                  <p className="text-sm opacity-60">
+                    <span className="font-medium">Received:</span>{' '}
+                    {formatDate(selectedMessage.createdAt)}
                   </p>
                 </div>
 
                 <div className="mb-6">
                   <h3 className="text-lg font-bold mb-3">Message</h3>
-                  <div className="bg-gray-50 p-4 rounded-lg whitespace-pre-wrap text-gray-700">
+                  <div className="p-4 rounded-lg whitespace-pre-wrap border border-foreground/20 bg-background">
                     {selectedMessage.message}
                   </div>
                 </div>
@@ -128,18 +135,25 @@ export default function Message() {
                   >
                     Copy Email
                   </button>
+
                   <button
-                    onClick={() => handleDeleteMessage(selectedMessage._id)}
+                    onClick={() =>
+                      handleDeleteMessage(selectedMessage._id)
+                    }
                     disabled={deleting === selectedMessage._id}
                     className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:bg-gray-400"
                   >
-                    {deleting === selectedMessage._id ? 'Deleting...' : 'Delete Message'}
+                    {deleting === selectedMessage._id
+                      ? 'Deleting...'
+                      : 'Delete Message'}
                   </button>
                 </div>
               </div>
             ) : (
               <div className="flex items-center justify-center h-full text-center py-20">
-                <p className="text-gray-500 text-lg">Select a message to view details</p>
+                <p className="text-lg opacity-70">
+                  Select a message to view details
+                </p>
               </div>
             )}
           </div>
@@ -147,9 +161,10 @@ export default function Message() {
       )}
 
       {/* Summary */}
-      <div className="mt-8 pt-4 border-t">
-        <p className="text-gray-600">
-          Total Messages: <span className="font-bold">{messages.length}</span>
+      <div className="mt-8 pt-4 border-t border-foreground/20">
+        <p className="opacity-80">
+          Total Messages:{' '}
+          <span className="font-bold">{messages.length}</span>
         </p>
       </div>
     </div>

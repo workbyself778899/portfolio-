@@ -65,7 +65,7 @@ export default function AdminExperience() {
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-6">
       <div className="flex justify-between">
-        <h1 className="text-2xl font-bold">Manage Resume</h1>
+        <h1 className="text-2xl font-bold">Manage Education & Experience </h1>
 
         <button
           onClick={() =>
@@ -139,7 +139,7 @@ export default function AdminExperience() {
               onChange={(e) =>
                 setForm({ ...form, type: e.target.value as any })
               }
-              className="w-full border p-2"
+              className="w-full text-white bg-black border p-2"
             >
               <option value="experience">Experience</option>
               <option value="education">Education</option>

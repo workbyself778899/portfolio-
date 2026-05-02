@@ -14,7 +14,7 @@ const navItems: NavItems[] = [
   { path: "/admin/home", label: "Home" },
   { path: "/admin/skill", label: "Skills" },
   { path: "/admin/projects", label: "Projects" },
-  { path: "/admin/resumes", label: "Resumes" },
+  { path: "/admin/resumes", label: "Experience & Education" },
   { path: "/admin/contact", label: "Contact" },
   { path: "/admin/message", label: "Messages" },
 ];
