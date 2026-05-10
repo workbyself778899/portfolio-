@@ -1,112 +1,287 @@
 @import "tailwindcss";
 
+
+
 :root {
+
   /* Default theme (dark) — next-themes will set html.dark / html.light as well */
+
   --background: #020617; /* slate-950 */
+
   --foreground: #e5e7eb; /* gray-200 */
 
+
+
   --card: rgba(15, 23, 42, 0.6); /* slate-900/60 */
+
   --card-foreground: #e5e7eb;
 
+
+
   --muted: rgba(15, 23, 42, 0.8); /* slate-900/80 */
+
   --muted-foreground: #94a3b8; /* slate-400 */
 
+
+
   --border: rgba(30, 41, 59, 0.8); /* slate-800/80 */
+
   --input: rgba(15, 23, 42, 0.6); /* slate-900/60 */
+
   --ring: #38bdf8; /* sky-400 */
+
 }
+
+
 
 @theme inline {
+
   --color-background: var(--background);
+
   --color-foreground: var(--foreground);
+
   --color-card: var(--card);
+
   --color-card-foreground: var(--card-foreground);
+
   --color-muted: var(--muted);
+
   --color-muted-foreground: var(--muted-foreground);
+
   --color-border: var(--border);
+
   --color-input: var(--input);
+
   --color-ring: var(--ring);
+
   --font-sans: var(--font-geist-sans);
+
   --font-mono: var(--font-geist-mono);
+
 }
+
+
 
 html.dark {
+
   color-scheme: dark;
+
 }
+
+
 
 html.light {
+
   color-scheme: light;
 
+
+
   --background: #f9fafb; /* gray-50 */
+
   --foreground: #0f172a; /* slate-900 */
 
+
+
   --card: rgba(255, 255, 255, 0.8);
+
   --card-foreground: #0f172a;
 
+
+
   --muted: rgba(241, 245, 249, 0.9); /* slate-100/90 */
+
   --muted-foreground: #475569; /* slate-600 */
 
+
+
   --border: rgba(203, 213, 225, 0.9); /* slate-300/90 */
+
   --input: rgba(255, 255, 255, 0.9);
+
   --ring: #0ea5e9; /* sky-500 */
+
 }
+
+
 
 html {
+
   scroll-behavior: smooth;
+
 }
+
+
 
 body {
+
   background: var(--background);
+
   color: var(--foreground);
+
   font-family: var(--font-geist-sans), system-ui, -apple-system, BlinkMacSystemFont,
+
     "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
 }
+
+
 
 ::selection {
+
   background-color: #38bdf8; /* sky-400 */
+
   color: #0f172a; /* slate-900 */
+
 }
+
+
 
 .container {
+
   @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+
 }
+
+
 
 .section-padding {
+
   @apply py-16 sm:py-20 lg:py-24;
+
 }
+
+
 
 .section-title {
+
   @apply text-3xl sm:text-4xl font-semibold tracking-tight text-sky-500;
+
 }
+
+
 
 .section-subtitle {
+
   @apply mt-2 max-w-2xl text-sm sm:text-base text-muted-foreground;
+
 }
+
+
 
 .card {
+
   @apply rounded-2xl border border-border bg-card p-5 shadow-xl shadow-black/30 backdrop-blur-md transition transform hover:-translate-y-1 hover:border-sky-500/60 hover:shadow-sky-900/40;
+
 }
+
+
 
 .pill {
+
   @apply rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium uppercase tracking-wide text-muted-foreground;
+
 }
+
+
 
 .btn-primary {
+
   @apply inline-flex items-center justify-center gap-2 rounded-full bg-sky-600 px-10 py-2.5 text-sm  text-white font-bold shadow-lg shadow-sky-500/30 transition hover:bg-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+
 }
+
+
 
 .btn-secondary {
+
   @apply inline-flex items-center justify-center gap-2 rounded-full border border-border bg-muted px-5 py-2.5 text-sm font-medium text-foreground shadow-lg shadow-black/30 transition hover:border-sky-500 hover:text-sky-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+
 }
+
+
 
 .input {
+
   @apply w-full rounded-xl border border-border bg-input px-3 py-2.5 text-sm text-foreground shadow-inner shadow-black/50 outline-none transition placeholder:text-muted-foreground focus:border-sky-500 focus:ring-1 focus:ring-ring;
+
 }
+
+
 
 .textarea {
+
   @apply w-full rounded-xl border border-border bg-input px-3 py-2.5 text-sm text-foreground shadow-inner shadow-black/50 outline-none transition placeholder:text-muted-foreground focus:border-sky-500 focus:ring-1 focus:ring-ring min-h-[120px] resize-none;
+
 }
 
+
+
 .badge {
+
   @apply inline-flex items-center gap-1 rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground ring-1 ring-border;
+
+}
+
+/* shooting star  */
+/* Twinkling static stars */
+.shooting-stars-container::before,
+.shooting-stars-container::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-repeat: repeat;
+  pointer-events: none;
+}
+
+/* Small dim stars */
+/* Twinkling static stars */
+.shooting-stars-container::before,
+.shooting-stars-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;   /* important: larger area for repetition */
+  height: 200%;
+  pointer-events: none;
+  background-repeat: repeat;
+}
+
+/* Small stars */
+.shooting-stars-container::before {
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 30% 70%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 50% 40%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1px 1px at 70% 80%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 90% 10%, rgba(255,255,255,0.4), transparent);
+
+  background-size: 200px 200px;
+
+  animation: twinkle 4s infinite ease-in-out;
+}
+
+/* Bigger stars */
+.shooting-stars-container::after {
+  background-image:
+    radial-gradient(2px 2px at 20% 30%, white, transparent),
+    radial-gradient(2px 2px at 60% 70%, rgba(255,255,255,0.8), transparent),
+    radial-gradient(2px 2px at 80% 20%, white, transparent),
+    radial-gradient(2px 2px at 40% 90%, rgba(255,255,255,0.9), transparent);
+
+  background-size: 300px 300px;
+
+  animation: twinkle 6s infinite ease-in-out;
+  animation-delay: 2s;
+}
+
+/* Twinkle animation */
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
 }
