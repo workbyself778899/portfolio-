@@ -108,6 +108,8 @@ html {
 
   scroll-behavior: smooth;
 
+  overflow-x: hidden;
+
 }
 
 
@@ -117,6 +119,10 @@ body {
   background: var(--background);
 
   color: var(--foreground);
+
+  overflow-x: hidden;
+
+  min-height: 100dvh;
 
   font-family: var(--font-geist-sans), system-ui, -apple-system, BlinkMacSystemFont,
 
@@ -138,7 +144,7 @@ body {
 
 .container {
 
-  @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+  @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 min-w-0;
 
 }
 
@@ -146,7 +152,7 @@ body {
 
 .section-padding {
 
-  @apply py-16 sm:py-20 lg:py-24;
+  @apply py-12 sm:py-16 md:py-20 lg:py-24 scroll-mt-20 sm:scroll-mt-24;
 
 }
 
@@ -154,7 +160,7 @@ body {
 
 .section-title {
 
-  @apply text-3xl sm:text-4xl font-semibold tracking-tight text-sky-500;
+  @apply text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-sky-500 break-words;
 
 }
 
@@ -170,15 +176,7 @@ body {
 
 .card {
 
-  @apply rounded-2xl border border-border bg-card p-5 shadow-xl shadow-black/30 backdrop-blur-md transition transform hover:-translate-y-1 hover:border-sky-500/60 hover:shadow-sky-900/40;
-
-}
-
-
-
-.pill {
-
-  @apply rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium uppercase tracking-wide text-muted-foreground;
+  @apply rounded-2xl border border-border bg-card p-4 sm:p-5 shadow-xl shadow-black/30 backdrop-blur-md transition transform hover:-translate-y-1 hover:border-sky-500/60 hover:shadow-sky-900/40;
 
 }
 
@@ -186,7 +184,7 @@ body {
 
 .btn-primary {
 
-  @apply inline-flex items-center justify-center gap-2 rounded-full bg-sky-600 px-10 py-2.5 text-sm  text-white font-bold shadow-lg shadow-sky-500/30 transition hover:bg-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  @apply inline-flex items-center justify-center gap-2 rounded-full bg-sky-600 px-6 py-2.5 text-sm text-white font-bold shadow-lg shadow-sky-500/30 transition hover:bg-green-700 sm:px-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background;
 
 }
 
@@ -222,66 +220,35 @@ body {
 
 }
 
-/* shooting star  */
-/* Twinkling static stars */
-.shooting-stars-container::before,
-.shooting-stars-container::after {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-repeat: repeat;
+/* Blinking stars background (dark theme) */
+.blinking-stars-container {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
   pointer-events: none;
+  overflow: hidden;
 }
 
-/* Small dim stars */
-/* Twinkling static stars */
-.shooting-stars-container::before,
-.shooting-stars-container::after {
-  content: "";
+.blinking-star {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 200%;   /* important: larger area for repetition */
-  height: 200%;
-  pointer-events: none;
-  background-repeat: repeat;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow:
+    0 0 6px rgba(147, 197, 253, 0.9),
+    0 0 12px rgba(56, 189, 248, 0.5);
+  animation-name: starBlink;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
 }
 
-/* Small stars */
-.shooting-stars-container::before {
-  background-image:
-    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(1px 1px at 30% 70%, rgba(255,255,255,0.4), transparent),
-    radial-gradient(1px 1px at 50% 40%, rgba(255,255,255,0.3), transparent),
-    radial-gradient(1px 1px at 70% 80%, rgba(255,255,255,0.5), transparent),
-    radial-gradient(1px 1px at 90% 10%, rgba(255,255,255,0.4), transparent);
-
-  background-size: 200px 200px;
-
-  animation: twinkle 4s infinite ease-in-out;
-}
-
-/* Bigger stars */
-.shooting-stars-container::after {
-  background-image:
-    radial-gradient(2px 2px at 20% 30%, white, transparent),
-    radial-gradient(2px 2px at 60% 70%, rgba(255,255,255,0.8), transparent),
-    radial-gradient(2px 2px at 80% 20%, white, transparent),
-    radial-gradient(2px 2px at 40% 90%, rgba(255,255,255,0.9), transparent);
-
-  background-size: 300px 300px;
-
-  animation: twinkle 6s infinite ease-in-out;
-  animation-delay: 2s;
-}
-
-/* Twinkle animation */
-@keyframes twinkle {
-  0%, 100% {
-    opacity: 0.2;
+@keyframes starBlink {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(0.6);
   }
   50% {
     opacity: 1;
+    transform: scale(1);
   }
 }

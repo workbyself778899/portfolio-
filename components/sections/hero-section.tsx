@@ -61,16 +61,20 @@ export function HeroSection() {
       subtitle={data.describe}
       image={data.image}
     >
-      <div className="grid md:grid-cols-2 gap-10 items-center">
-        
-        {/* LEFT CONTENT */}
-        <div className="space-y-4">
-          {data.intro && <h2 className="text-2xl font-bold">{data.intro}</h2>}
+      <div className="grid items-start gap-6 sm:gap-8 md:grid-cols-2 md:items-center">
+        <div className="min-w-0 space-y-3 sm:space-y-4">
+          {data.intro && (
+            <h2 className="text-xl font-bold sm:text-2xl">{data.intro}</h2>
+          )}
           {data.s_intro && (
-            <p className="text-base text-muted-foreground">{data.s_intro}</p>
+            <p className="text-sm text-muted-foreground sm:text-base">
+              {data.s_intro}
+            </p>
           )}
           {data.message && (
-            <p className="text-base text-muted-foreground">{data.message}</p>
+            <p className="text-sm text-muted-foreground sm:text-base">
+              {data.message}
+            </p>
           )}
 
           {data.tag && data.tag.length > 0 && (
@@ -83,7 +87,6 @@ export function HeroSection() {
             </div>
           )}
         </div>
-
       </div>
     </SectionWrapper>
   );

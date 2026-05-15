@@ -155,19 +155,19 @@ export default function Projects() {
     return <div className="p-6 text-foreground">Loading...</div>;
 
   return (
-    <div className="p-6 max-w-6xl mx-auto bg-background text-foreground">
+    <div className="mx-auto max-w-6xl bg-background p-4 text-foreground sm:p-6">
       
       {/* HEADER */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Edit Projects</h1>
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-2xl font-bold sm:text-3xl">Edit Projects</h1>
 
-        <button className="px-5 py-2 bg-green-500 text-white rounded" onClick={handleAddProject}>
+        <button className="w-full rounded bg-green-500 px-5 py-2 text-white sm:w-auto" onClick={handleAddProject}>
           Add Project
         </button>
       </div>
 
       {/* LIST */}
-      <div className="grid md:grid-cols-2 gap-4 mb-10">
+      <div className="mb-10 grid grid-cols-1 gap-4 md:grid-cols-2">
         {projects
           .sort((a, b) => a.order - b.order)
           .map((project) => (

@@ -2,11 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { PageTransition } from "@/components/page-transition";
 import { Toaster } from "react-hot-toast";
-import ShootingStars from "@/components/sections/shooting-stars";
+import BlinkingStars from "@/components/sections/blinking-stars";
 
 
 const geistSans = Geist({
@@ -27,6 +26,12 @@ const geistMono = Geist_Mono({
 });
 
 
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
 
 export const metadata: Metadata = {
 
@@ -94,15 +99,15 @@ export default function RootLayout({
 
         >
 
-<ShootingStars />
+          <BlinkingStars />
 
-          <div className="flex flex-col bg-background text-foreground">
+          <div className="relative z-10 flex min-h-dvh flex-col text-foreground">
 
             <Toaster position="top-right" />
 
             <PageTransition>
 
-              <main className="pt-0 pb-10  flex-1">
+              <main className="flex-1 pb-8 sm:pb-10">
 
                 {children}
 

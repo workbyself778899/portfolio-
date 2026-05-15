@@ -53,7 +53,7 @@ export function ProjectsSection() {
           No projects yet. Add projects from the admin panel.
         </p>
       ) : (
-        <div className="grid pt-6 gap-6 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-5 pt-4 sm:gap-6 sm:pt-6 md:grid-cols-2">
           {projects.map((project) => (
             <motion.article
               key={project._id ?? project.title}
@@ -63,7 +63,7 @@ export function ProjectsSection() {
             >
               {/* IMAGE */}
               {project.image && (
-                <div className="relative h-44 w-full overflow-hidden">
+                <div className="relative h-40 w-full overflow-hidden sm:h-44">
                   <Image
                     src={project.image}
                     alt={project.title}
@@ -76,7 +76,7 @@ export function ProjectsSection() {
               {/* CONTENT */}
               <div className="flex flex-1 flex-col justify-between p-4">
                 <div>
-                  <h3 className="text-base font-semibold text-foreground">
+                  <h3 className="text-sm font-semibold text-foreground sm:text-base">
                     {project.title}
                   </h3>
 

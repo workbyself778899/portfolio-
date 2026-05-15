@@ -52,6 +52,13 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -87,17 +94,19 @@ export function Navbar() {
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className={`fixed inset-x-0 top-0 z-40 ${
-        isScrolled ? "backdrop-blur-md" : "backdrop-blur-none"
+      className={`fixed inset-x-0 top-0 z-50 border-b border-transparent transition-colors ${
+        isScrolled || open
+          ? "border-border bg-background/80 backdrop-blur-md"
+          : "bg-background/40 backdrop-blur-sm"
       }`}
     >
-      <div className="container flex items-center justify-between py-3">
+      <div className="container flex items-center justify-between gap-3 py-2.5 sm:py-3">
         <div
           className="flex cursor-pointer items-center gap-2"
           onClick={() => handleNavClick("home")}
         >
 
-<div className="w-[50px] h-[50px] rounded-full overflow-hidden">
+<div className="h-10 w-10 shrink-0 overflow-hidden rounded-full sm:h-12 sm:w-12">
   {data?.image ? (
     <Image
       src={data.image}
@@ -112,15 +121,14 @@ export function Navbar() {
             CV
            
           </div> */}
-          <div className="hidden flex-col text-sm sm:flex">
-            <span className="font-semibold tracking-tight text-foreground">
+          <div className="flex min-w-0 max-w-[140px] flex-col text-sm sm:max-w-none">
+            <span className="truncate font-semibold tracking-tight text-foreground">
               {data?.title}
             </span>
-            
           </div>
         </div>
 
-        <nav className="hidden items-center gap-1 rounded-full border border-border bg-card px-2 py-1 text-xs shadow-lg shadow-black/40 md:flex">
+        <nav className="hidden items-center gap-1 rounded-full border border-border bg-card px-2 py-1 text-xs shadow-lg shadow-black/40 lg:flex">
           {SECTIONS.map((section) => (
             <button
               key={section.id}
@@ -146,7 +154,7 @@ export function Navbar() {
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <button
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-md shadow-black/40 md:hidden"
+            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-md shadow-black/40 lg:hidden"
             onClick={() => setOpen((prev) => !prev)}
             aria-label="Toggle navigation menu"
           >
@@ -160,7 +168,7 @@ export function Navbar() {
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
-          className="border-b border-border dark:bg-black bg-white md:hidden"
+          className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-b border-border bg-background lg:hidden"
         >
           <div className="container flex flex-col gap-1 py-3 text-sm">
             {SECTIONS.map((section) => (

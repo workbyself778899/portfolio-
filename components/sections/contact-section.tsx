@@ -126,12 +126,12 @@ export function ContactSection() {
       title="Let’s build something"
       subtitle="Have a project in mind, an internship opportunity, or just want to say hi?"
     >
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 gap-8 sm:gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
         
         {/* FORM */}
         <motion.form
           onSubmit={handleSubmit}
-          className="space-y-4 rounded-2xl border border-border bg-card p-5 shadow-lg shadow-black/40"
+          className="min-w-0 space-y-4 rounded-2xl border border-border bg-card p-4 shadow-lg shadow-black/40 sm:p-5"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -207,21 +207,34 @@ export function ContactSection() {
         </motion.form>
 
         {/* CONTACT INFO */}
-        <div className="space-y-4">
+        <div className="min-w-0 space-y-4">
           {hasContactContent ? (
             <>
               <div className="card">
-                <h3 className=" font-bold text-xl">Contact details</h3>
-            <span className="font-bold"></span>
-              {contactText && <p className="my-2 italic text-xm">   {contactText} </p>}
-                {email && <p className="">Email:  <span className="font-semibold"> {email}  </span> </p>}
-                {location && <p className="text">Location:  <span className="font-semibold"> {location} </span> </p>}
+                <h3 className="text-lg font-bold sm:text-xl">Contact details</h3>
+              {contactText && (
+                <p className="my-2 text-sm italic text-muted-foreground sm:text-base">
+                  {contactText}
+                </p>
+              )}
+              {email && (
+                <p className="break-all text-sm sm:text-base">
+                  Email:{" "}
+                  <span className="font-semibold">{email}</span>
+                </p>
+              )}
+              {location && (
+                <p className="text-sm sm:text-base">
+                  Location:{" "}
+                  <span className="font-semibold">{location}</span>
+                </p>
+              )}
                   
               </div>
 
               <div className="card">
-                <h3 className="text-xl font-semibold">Social links</h3>
-                <div className="flex my-2 gap-3">
+                <h3 className="text-lg font-semibold sm:text-xl">Social links</h3>
+                <div className="my-2 flex flex-wrap gap-3">
                   {socialLinks.github && (
                     <a href={socialLinks.github} target="_blank">
                       <FiGithub size={30}/>

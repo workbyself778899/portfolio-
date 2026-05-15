@@ -45,20 +45,20 @@ export function ExperienceSection() {
       title="Experience & Education"
       subtitle="A quick overview of my academic journey and professional experience."
     >
-      <div className="flex py-4 flex-col gap-10 lg:flex-row lg:items-start">
-        <div className="flex-1 space-y-8">
+      <div className="flex flex-col gap-8 py-2 sm:gap-10 sm:py-4 lg:flex-row lg:items-start">
+        <div className="min-w-0 flex-1 space-y-6 sm:space-y-8">
           {sections.map((group) => (
             <div key={group.type} className="space-y-4">
               <h3 className="text-xs font-semibold uppercase tracking-[0.25em] text-muted-foreground">
                 {group.type}
               </h3>
 
-              <ol className="relative space-y-6 border-l border-border pl-5">
+              <ol className="relative space-y-5 border-l border-border pl-4 sm:space-y-6 sm:pl-5">
                 {group.items.map((item, i) => (
                   <li key={item._id ?? i} className="relative">
                     <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full border border-border bg-background" />
 
-                    <div className="rounded-xl border border-border bg-card p-4">
+                    <div className="rounded-xl border border-border bg-card p-3 sm:p-4">
                       <p className="text-[11px] text-muted-foreground">
                         {item.startDate} - {item.endDate}
                       </p>

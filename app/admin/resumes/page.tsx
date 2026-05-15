@@ -63,9 +63,11 @@ export default function AdminExperience() {
   };
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-6">
-      <div className="flex justify-between">
-        <h1 className="text-2xl font-bold">Manage Education & Experience </h1>
+    <div className="mx-auto max-w-5xl space-y-6 p-4 sm:p-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-xl font-bold sm:text-2xl">
+          Manage Education & Experience
+        </h1>
 
         <button
           onClick={() =>
@@ -80,7 +82,7 @@ export default function AdminExperience() {
               order: data.length,
             })
           }
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+          className="w-full rounded bg-blue-500 px-4 py-2 text-white sm:w-auto"
         >
           + Add
         </button>

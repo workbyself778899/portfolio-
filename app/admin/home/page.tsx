@@ -92,7 +92,7 @@ export default function HomeAdmin() {
     };
 
     return (
-        <div className="max-w-2xl mx-auto ">
+        <div className="mx-auto w-full max-w-2xl px-2 sm:px-0">
             <h2 className="text-2xl font-bold mb-4">Edit Home Data</h2>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4  p-4 rounded shadow">
                 <div>
